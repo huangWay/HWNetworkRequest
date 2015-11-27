@@ -496,6 +496,7 @@
 				8F1E53681C042C6400C81F0B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		8F1E53691C042C6400C81F0B /* Build configuration list for PBXNativeTarget "HWNetworkRequestTests" */ = {
 			isa = XCConfigurationList;
@@ -504,6 +505,7 @@
 				8F1E536B1C042C6400C81F0B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		8F1E536C1C042C6400C81F0B /* Build configuration list for PBXNativeTarget "HWNetworkRequestUITests" */ = {
 			isa = XCConfigurationList;
@@ -512,6 +514,7 @@
 				8F1E536E1C042C6400C81F0B /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
