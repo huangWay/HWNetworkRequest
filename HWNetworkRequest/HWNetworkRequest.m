@@ -7,67 +7,84 @@
 //
 
 #import "HWNetworkRequest.h"
-#import "AFNetworking.h"
+
+
+@interface HWNetworkRequest()
+@end
+
 @implementation HWNetworkRequest
+
++ (AFHTTPRequestOperationManager *)standardManager {
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager.responseSerializer setAcceptableContentTypes:[NSSet setWithObjects:@"text/javascript",@"application/json",@"text/json",@"image/png", nil]];
+    return manager;
+}
 //get请求
 + (void)GET:(NSString *)url params:(NSDictionary *)params success:(requestSuccessBlock)success failure:(requestFalidBlock)failed {
     if (![self networkStatus]) {
-        success(nil);
-        failed(nil);
+        !success?:success(nil,nil);
+        !failed?:failed(nil,nil);
         return;
     }
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    AFHTTPRequestOperationManager *manager = [self standardManager];
     [manager GET:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
+        NSLog(@"lai kankan : %@,%@",operation.request,operation.responseData);
         if (success) {
-            success(responseObject);
+            success(operation,responseObject);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSData *data = error.userInfo[@"com.alamofire.serialization.response.error.data"];
+        NSString *result =[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
         if (failed) {
-            failed(error);
+            failed(error,result);
         }
     }];
 }
 //post请求
 + (void)POST:(NSString *)url params:(NSDictionary *)params success:(requestSuccessBlock)success failure:(requestFalidBlock)failed {
     if (![self networkStatus]) {
-        success(nil);
-        failed(nil);
+        !success?:success(nil,nil);
+        !failed?:failed(nil,nil);
         return;
     }
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    AFHTTPRequestOperationManager *manager = [self standardManager];
     [manager POST:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (success) {
-            success(responseObject);
+            success(operation,responseObject);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSData *data = error.userInfo[@"com.alamofire.serialization.response.error.data"];
+        NSString *result =[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
         if (failed) {
-            failed(error);
+            failed(error,result);
         }
     }];
 }
 //delete请求
 + (void)DELETE:(NSString *)url params:(NSDictionary *)params success:(requestSuccessBlock)success failure:(requestFalidBlock)failed {
     if (![self networkStatus]) {
-        success(nil);
-        failed(nil);
+        !success?:success(nil,nil);
+        !failed?:failed(nil,nil);
         return;
     }
-    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    AFHTTPRequestOperationManager *manager = [self standardManager];
     [manager DELETE:url parameters:params success:^(AFHTTPRequestOperation *operation, id responseObject) {
         if (success) {
-            success(responseObject);
+            success(operation,responseObject);
         }
     } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+        NSData *data = error.userInfo[@"com.alamofire.serialization.response.error.data"];
+        NSString *result =[[NSString alloc]initWithData:data encoding:NSUTF8StringEncoding];
         if (failed) {
-            failed(error);
+            failed(error,result);
         }
     }];
 }
 //监听下载进度
 + (void)downloadRequest:(NSString *)url successProgress:(progressBlock)progress complete:(responseBlock)completion {
     if (![self networkStatus]) {
-        progress(0,0,0);
-        completion(nil,nil);
+        !progress?:progress(0,0,0);
+        !completion?:completion(nil,nil);
         return;
     }
     NSURLSessionConfiguration *sessionConfig = [NSURLSessionConfiguration defaultSessionConfiguration];
@@ -92,8 +109,8 @@
 //监听文件上传进度
 + (void)updateRequest:(NSString *)url params:(NSDictionary *)params fileConfig:(HWFileConfig *)fileConfig successProgress:(progressBlock)progress complete:(responseBlock)completion {
     if (![self networkStatus]) {
-        progress(0,0,0);
-        completion(nil,nil);
+        !progress?:progress(0,0,0);
+        !completion?:completion(nil,nil);
         return;
     }
     NSURLRequest *urlRequest = [[AFHTTPRequestSerializer serializer] multipartFormRequestWithMethod:@"POST" URLString:url parameters:params constructingBodyWithBlock:^(id<AFMultipartFormData> formData) {

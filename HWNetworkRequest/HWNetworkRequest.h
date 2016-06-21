@@ -7,19 +7,21 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AFNetworking.h"
+
 @class HWFileConfig;
 /**
  *  请求成功的回调
  *
  *  @param responseObject 成功后返回的数据
  */
-typedef void(^requestSuccessBlock)(id responseObject);
+typedef void(^requestSuccessBlock)(AFHTTPRequestOperation *operation,id responseObject);
 /**
  *  请求失败的回调
  *
  *  @param error 失败
  */
-typedef void(^requestFalidBlock)(NSError *error);
+typedef void(^requestFalidBlock)(NSError *error,NSString *errorDescription);
 /**
  *  响应成功的回调
  *
